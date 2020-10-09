@@ -87,16 +87,6 @@ led_config_t g_led_config = {
 
 // clang-format on
 
-// Set custom key colors here, in order to change the RGB effect, either reserve some keys
-// in the keymap to adjust the pattern (see QMK docs, incompatible with wrapper keys) or
-// change the default pattern in config.h.
-/*
-void rgb_matrix_indicators_kb(void) {
-    //rgb_matrix_set_color(0, 255, 255, 255);
-    //rgb_matrix_set_color_all(0x86,0xff,0xff);
-}
-*/
-
 void keyboard_pre_init_kb(void) {
     // Light power LED
     setPinOutput(POWER_LED_PIN);
@@ -114,6 +104,8 @@ void keyboard_pre_init_kb(void) {
 void keyboard_post_init_user() {
     // RGB enabled by default, no way to turn off. No need to expend EEPROM write cycles here.
     rgb_matrix_enable_noeeprom();
+    rgb_matrix_mode(RGB_MATRIX_SOLID_REACTIVE_WIDE);
+    rgb_matrix_sethsv_noeeprom(100, 200, 150);
 }
 #endif
 
