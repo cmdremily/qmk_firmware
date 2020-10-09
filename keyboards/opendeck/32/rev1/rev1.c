@@ -13,7 +13,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include "rev1.h"
 
 #ifdef RGB_MATRIX_ENABLE
@@ -90,12 +89,25 @@ led_config_t g_led_config = {
 // Set custom key colors here, in order to change the RGB effect, either reserve some keys
 // in the keymap to adjust the pattern (see QMK docs, incompatible with wrapper keys) or
 // change the default pattern in config.h.
-/*
+
+void set_led_xy(uint8_t x, uint8_t y, uint8_t r, uint8_t g, uint8_t b) { rgb_matrix_set_color(x + 8 * y, r, g, b); }
+
 void rgb_matrix_indicators_kb(void) {
-    //rgb_matrix_set_color(0, 255, 255, 255);
-    //rgb_matrix_set_color_all(0x86,0xff,0xff);
+    for (uint8_t x = 0; x < MATRIX_COLS; ++x) {
+        for (uint8_t y = 0; y < MATRIX_ROWS; ++y) {
+	  if(x >= 5){
+            set_led_xy(x, y, 0x87, 0xCD, 0xDE);
+	  }else{
+	    if(y < 2){
+	      set_led_xy(x, y, 0x00, 0xFF, 0x80);
+	    }else{
+	      set_led_xy(x, y, 0xFF, 0x0F, 0x80);
+	    }
+	  }
+        }
+    }
+    // rgb_matrix_set_color_all(0x86,0xff,0xff);
 }
-*/
 
 void keyboard_pre_init_kb(void) {
     // Light power LED
@@ -122,7 +134,9 @@ void keyboard_post_init_user() {
 static uint8_t g_key_wrapper_tracker = 0;
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-    if (!process_record_user(keycode, record) { return false; }
+    if (!process_record_user(keycode, record)) {
+        return false;
+    }
     if (record->event.pressed && keycode != KC_WRAPPER_KEY) {
         register_code(KC_WRAPPER_KEY);
         register_code(keycode);
